@@ -1,7 +1,17 @@
 class Api::V1::PaymentsController < ApplicationController
 
   before_action :set_idempotency_key, only: [:post, :confirm, :refund]
-  before_action :set_payment_intent, only: [:confirm, :refund]
+  before_action :set_payment_intent, only: [:confirm, :refund, :show]
+
+  def index
+    payment_intents = PaymentIntent.all.order(created_at: :desc)
+    render json: payment_intents
+  end
+
+  def show
+    render json: @payment_intent
+  end
+
   def post
     payment_intent = PaymentIntent.find_by(idempotency_key: @idempotency_key)
 

@@ -7,9 +7,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get "payments" => "payments#index"
+      get "payments/:id" => "payments#show"
       post "payments" => "payments#post"
       post "payments/:id/confirm" => "payments#confirm"
       post "payments/:id/refund" => "payments#refund"
+
+      get "outbox_events" => "outbox_events#index"
     end
   end
 end
