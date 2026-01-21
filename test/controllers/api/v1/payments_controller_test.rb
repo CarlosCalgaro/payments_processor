@@ -43,21 +43,20 @@ class Api::V1::PaymentsControllerTest < ActionDispatch::IntegrationTest
     payload = {
       payment_intent: {
         amount_cents: 1500,
-        currency: "BRL",
-        idempotency_key: idempotency_key
+        currency: "BRL"
       }
     }
 
     # First request should succeed
     assert_difference -> { PaymentIntent.count }, +1 do
-      post "/api/v1/payments", params: payload, as: :json
+      post "/api/v1/payments", params: payload, headers: { "Idempotency-Key" => idempotency_key }, as: :json
     end
     assert_response :created
     first_response = JSON.parse(response.body)
 
     # Second request with same idempotency key should not create a new record
     assert_no_difference -> { PaymentIntent.count } do
-      post "/api/v1/payments", params: payload, as: :json
+      post "/api/v1/payments", params: payload, headers: { "Idempotency-Key" => idempotency_key }, as: :json
     end
     
     # Should return the original payment intent
