@@ -5,7 +5,11 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  post "payments" => "v1/payments#post"
-  post "payments/:id/confirm" => "v1/payments#confirm"
-  post "payments/:id/refund" => "v1/payments#refund"
+  namespace :api do
+    namespace :v1 do
+      post "payments" => "payments#post"
+      post "payments/:id/confirm" => "payments#confirm"
+      post "payments/:id/refund" => "payments#refund"
+    end
+  end
 end
