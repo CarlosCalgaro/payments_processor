@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_20_141656) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_183156) do
   create_table "outbox_events", force: :cascade do |t|
     t.string "aggregate"
     t.integer "aggregate_id", null: false
     t.string "aggregate_type", null: false
     t.datetime "created_at", null: false
     t.string "event_id"
+    t.string "event_type"
     t.datetime "published_at"
     t.integer "retry_count"
     t.string "status"
@@ -26,9 +27,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_20_141656) do
 
   create_table "payment_intents", force: :cascade do |t|
     t.integer "amount_cents"
+    t.string "confirmation_idempotency_key"
     t.datetime "created_at", null: false
     t.string "currency"
     t.string "idempotency_key"
+    t.string "provider_payment_id"
+    t.string "refund_idempotency_key"
     t.string "status"
     t.datetime "updated_at", null: false
   end
